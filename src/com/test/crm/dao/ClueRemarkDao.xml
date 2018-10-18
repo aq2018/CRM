@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.ClueRemarkDao">
+	<insert id="add" parameterType="Remark">
+		insert into tbl_clue_remark(id,description,createBy,createTime,editFlag,p_clueId)
+		values(#{id},#{description},#{createBy},#{createTime},#{editFlag},#{p_clueId})
+	</insert>
+	<select id="getRemarks" resultType="Remark">
+		select * from tbl_clue_remark where p_clueId = #{id} order by createTime asc
+	</select>
+	<update id="update" parameterType="Remark">
+		update tbl_clue_remark set description=#{description},editFlag=#{editFlag},editBy=#{editBy},editTime=#{editTime} where id=#{id}
+	</update>
+	<delete id="delById">
+		delete from tbl_clue_remark where id = #{id}
+	</delete>
+	<delete id="delByClueId">
+		delete from tbl_clue_remark where p_clueId in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<delete id="delByClueId2">
+		delete from tbl_clue_remark where p_clueId =#{id}
+	</delete>
+</mapper>

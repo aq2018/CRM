@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <welcome-file-list>
+    <welcome-file>welcome.do</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 加载实现类缓存监听器 -->
+  <!-- <listener>
+  	<listener-class>com.test.crm.listener.ApplicationContextListener</listener-class>
+  </listener> -->
+  <!-- 系统初始化监听器 -->
+  <listener>
+  	<listener-class>com.test.crm.listener.SysInitListener</listener-class>
+  </listener>
+  
+  <!-- 登录验证的过滤器 -->
+  <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>com.test.crm.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+    <url-pattern>*.do</url-pattern>
+    <url-pattern>*.html</url-pattern>
+  </filter-mapping>
+  
+  <!-- 编码过滤 -->
+ <filter>
+    <filter-name>CharaterEncodingFilter</filter-name>
+    <filter-class>com.test.crm.filter.CharaterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharaterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- 自动登录-->
+  <servlet>
+    <servlet-name>welcome</servlet-name>
+    <servlet-class>com.test.crm.web.WelcomeController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcome</servlet-name>
+    <url-pattern>/welcome.do</url-pattern>
+  </servlet-mapping>
+
+  
+  <!-- login -->
+   <servlet>
+    <servlet-name>login</servlet-name>
+    <servlet-class>com.test.crm.web.LoginController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/login</url-pattern>
+    <url-pattern>/logout</url-pattern>
+    <url-pattern>/sendMail</url-pattern>
+    <url-pattern>/forgot</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 部门 -->
+  <servlet>
+    <servlet-name>dept</servlet-name>
+    <servlet-class>com.test.crm.controller.DeptController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dept</servlet-name>
+    <url-pattern>/settings/dept/getList.do</url-pattern>
+    <url-pattern>/settings/dept/add.do</url-pattern>
+    <url-pattern>/settings/dept/edit.do</url-pattern>
+    <url-pattern>/settings/dept/update.do</url-pattern>
+    <url-pattern>/settings/dept/del.do</url-pattern>
+    <url-pattern>/settings/dept/checkDeptNo.do</url-pattern>
+    <url-pattern>/settings/dept/getDeptNameList.do</url-pattern>
+    <url-pattern>/settings/dept/getCondition.do</url-pattern>
+    <url-pattern>/settings/dept/getDeptByName.do</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Page</servlet-name>
+    <servlet-class>com.test.crm.controller.PageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Page</servlet-name>
+    <url-pattern>/pageCondition.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 市场活动 -->
+  <servlet>
+    <servlet-name>marketActive</servlet-name>
+    <servlet-class>com.test.crm.controller.MarketController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>marketActive</servlet-name>
+    <url-pattern>/workbench/activity/add.do</url-pattern>
+    <url-pattern>/workbench/activity/edit.do</url-pattern>
+    <url-pattern>/workbench/activity/query.do</url-pattern>
+    <url-pattern>/workbench/activity/del.do</url-pattern>
+    <url-pattern>/workbench/activity/updateAct.do</url-pattern>
+    <url-pattern>/workbench/activity/getOwner.do</url-pattern>
+    <url-pattern>/workbench/activity/detail.do</url-pattern>
+    <url-pattern>/workbench/activity/delAct.do</url-pattern>
+    <url-pattern>/workbench/activity/addNote.do</url-pattern>
+    <url-pattern>/workbench/activity/getNotes.do</url-pattern>
+    <url-pattern>/workbench/activity/delNote.do</url-pattern>
+    <url-pattern>/workbench/activity/delNoteById.do</url-pattern>
+    <url-pattern>/workbench/activity/updateNote.do</url-pattern>
+    <url-pattern>/workbench/activity/exportAll.do</url-pattern>
+    <url-pattern>/workbench/activity/exportChk.do</url-pattern>
+    <url-pattern>/workbench/activity/import.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 字典类型 -->
+  <servlet>
+    <servlet-name>dicType</servlet-name>
+    <servlet-class>com.test.crm.controller.DicTypeController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dicType</servlet-name>
+    <url-pattern>/settings/dictionary/type/getList.do</url-pattern>
+    <url-pattern>/settings/dictionary/type/addType.do</url-pattern>
+    <url-pattern>/settings/dictionary/type/eidtType.do</url-pattern>
+    <url-pattern>/settings/dictionary/type/deltType.do</url-pattern>
+    <url-pattern>/settings/dictionary/type/updateType.do</url-pattern>
+    <url-pattern>/settings/dictionary/type/checkByCode.do</url-pattern>
+  </servlet-mapping>
+  <!-- 字典值 -->
+  <servlet>
+    <servlet-name>dicValue</servlet-name>
+    <servlet-class>com.test.crm.controller.DicValueController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dicValue</servlet-name>
+    <url-pattern>/settings/dictionary/value/getList.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/add.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/edit.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/del.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/update.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/getTypeCode.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/getValue.do</url-pattern>
+    <url-pattern>/settings/dictionary/value/checkUniqueByTypeAndValue.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 用户管理  -->
+  <servlet>
+    <servlet-name>userManage</servlet-name>
+    <servlet-class>com.test.crm.controller.UserManageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>userManage</servlet-name>
+    <url-pattern>/settings/qx/user/query.do</url-pattern>
+    <url-pattern>/settings/qx/user/add.do</url-pattern>
+    <url-pattern>/settings/qx/user/getByAccount.do</url-pattern>
+    <url-pattern>/settings/qx/user/getById.do</url-pattern>
+    <url-pattern>/settings/qx/user/update.do</url-pattern>
+    <url-pattern>/settings/qx/user/del.do</url-pattern>
+    <url-pattern>/settings/qx/user/userInfo.do</url-pattern>
+    <url-pattern>/settings/qx/user/getOwner.do</url-pattern>
+    <url-pattern>/settings/qx/user/changeState.do</url-pattern>
+    <url-pattern>/settings/qx/user/checkAct.do</url-pattern>
+    <url-pattern>/settings/qx/user/checkOldPwd.do</url-pattern>
+    <url-pattern>/settings/qx/user/resetPwd.do</url-pattern>
+  </servlet-mapping>
+    
+  <!-- role角色 -->
+  <servlet>
+    <servlet-name>role</servlet-name>
+    <servlet-class>com.test.crm.controller.RoleController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>role</servlet-name>
+    <url-pattern>/settings/qx/role/add.do</url-pattern>
+    <url-pattern>/settings/qx/role/list.do</url-pattern>
+    <url-pattern>/settings/qx/role/del.do</url-pattern>
+    <url-pattern>/settings/qx/role/check.do</url-pattern>
+    <url-pattern>/settings/qx/role/detail.do</url-pattern>
+    <url-pattern>/settings/qx/role/update.do</url-pattern>
+    <url-pattern>/settings/qx/role/doPermissionTree</url-pattern>
+  </servlet-mapping>
+  <!-- 许可维护 -->
+	<servlet>
+	 <servlet-name>permission</servlet-name>
+	 <servlet-class>com.test.crm.web.settings.qx.permission.controller.PermissionController</servlet-class>
+	</servlet>
+  	<servlet-mapping>
+	 <servlet-name>permission</servlet-name>
+	 <url-pattern>/settings/qx/permission/save</url-pattern>
+	 <url-pattern>/settings/qx/permission/update</url-pattern>
+	 <url-pattern>/settings/qx/permission/del</url-pattern>
+	 <url-pattern>/settings/qx/permission/getTree</url-pattern>
+	 <url-pattern>/settings/qx/permission/detail</url-pattern>
+	</servlet-mapping>
+	
+  <!-- clue线索 -->
+  <servlet>
+    <servlet-name>clue</servlet-name>
+    <servlet-class>com.test.crm.controller.ClueController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>clue</servlet-name>
+    <url-pattern>/workbench/clue/save.do</url-pattern>
+    <url-pattern>/workbench/clue/getByCondition.do</url-pattern>
+    <url-pattern>/workbench/clue/edit.do</url-pattern>
+    <url-pattern>/workbench/clue/update.do</url-pattern>
+    <url-pattern>/workbench/clue/delete.do</url-pattern>
+    <url-pattern>/workbench/clue/exportAll.do</url-pattern>
+    <url-pattern>/workbench/clue/exportChk.do</url-pattern>
+    <url-pattern>/workbench/clue/import.do</url-pattern>
+    <url-pattern>/workbench/clue/detail.do</url-pattern>
+    <url-pattern>/workbench/clue/getRemarks.do</url-pattern>
+    <url-pattern>/workbench/clue/addRemark.do</url-pattern>
+    <url-pattern>/workbench/clue/updateRemark.do</url-pattern>
+    <url-pattern>/workbench/clue/delRemark.do</url-pattern>
+    <url-pattern>/workbench/clue/associateAct.do</url-pattern>
+    <url-pattern>/workbench/clue/getAssociateActs.do</url-pattern>
+    <url-pattern>/workbench/clue/queryAssociateAct.do</url-pattern>
+    <url-pattern>/workbench/clue/addAssociateAct.do</url-pattern>
+    <url-pattern>/workbench/clue/delAssociateAct.do</url-pattern>
+    <url-pattern>/workbench/clue/getOwner.do</url-pattern>
+    <url-pattern>/workbench/clue/getStage.do</url-pattern>
+    <url-pattern>/workbench/clue/getActsOrigin.do</url-pattern>
+    <url-pattern>/workbench/clue/convert.do</url-pattern>
+  </servlet-mapping>
+
+  <!-- customer客户 -->
+  <servlet>
+    <servlet-name>customer</servlet-name>
+    <servlet-class>com.test.crm.web.customer.controller.CustomerController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>customer</servlet-name>
+    <url-pattern>/workbench/customer/getOwner</url-pattern>
+    <url-pattern>/workbench/customer/add</url-pattern>
+    <url-pattern>/workbench/customer/query</url-pattern>
+    <url-pattern>/workbench/customer/detail</url-pattern>
+    <url-pattern>/workbench/customer/edit</url-pattern>
+    <url-pattern>/workbench/customer/update</url-pattern>
+    <url-pattern>/workbench/customer/imports</url-pattern>
+    <url-pattern>/workbench/customer/exportChk</url-pattern>
+    <url-pattern>/workbench/customer/exportAll</url-pattern>
+    <url-pattern>/workbench/customer/del</url-pattern>
+    <url-pattern>/workbench/customer/searchCustome</url-pattern>
+    <!-- 客户备注 -->
+    <url-pattern>/workbench/customer/addRemark</url-pattern>
+    <url-pattern>/workbench/customer/getRemarks</url-pattern>
+    <url-pattern>/workbench/customer/updateRemark</url-pattern>
+    <url-pattern>/workbench/customer/delRemark</url-pattern>
+    <!-- 客户操作交易 -->
+    <url-pattern>/workbench/customer/transInfo</url-pattern>
+    <url-pattern>/workbench/customer/delTrans</url-pattern>
+    <!-- 客户添加联系人 -->
+    <url-pattern>/workbench/customer/addContact</url-pattern>
+    <url-pattern>/workbench/customer/getContacts</url-pattern>
+    <url-pattern>/workbench/customer/delContact</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 联系人contacts -->
+  <servlet>
+    <servlet-name>contacts</servlet-name>
+    <servlet-class>com.test.crm.web.contact.controller.ContactController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+   <servlet-name>contacts</servlet-name>
+   <url-pattern>/workbench/contacts/add</url-pattern>
+   <url-pattern>/workbench/contacts/getOwner</url-pattern>
+   <url-pattern>/workbench/contacts/update</url-pattern>
+   <url-pattern>/workbench/contacts/edit</url-pattern>
+   <url-pattern>/workbench/contacts/del</url-pattern>
+   <url-pattern>/workbench/contacts/query</url-pattern>
+   <url-pattern>/workbench/contacts/detail</url-pattern>
+   <url-pattern>/workbench/contacts/imports</url-pattern>
+   <url-pattern>/workbench/contacts/exportChk</url-pattern>
+   <url-pattern>/workbench/contacts/importAll</url-pattern>
+   <!-- 联系人备注 -->
+   <url-pattern>/workbench/contacts/addRemark</url-pattern>
+   <url-pattern>/workbench/contacts/getRemark</url-pattern>
+   <url-pattern>/workbench/contacts/updateRemark</url-pattern>
+   <url-pattern>/workbench/contacts/delRemark</url-pattern>
+   <!-- 联系人关联市场活动 -->
+   <url-pattern>/workbench/contacts/getAssociateActs</url-pattern>
+   <url-pattern>/workbench/contacts/queryAssociateAct</url-pattern>
+   <url-pattern>/workbench/contacts/delAssociateAct</url-pattern>
+   <url-pattern>/workbench/contacts/addAssociateAct</url-pattern>
+   <!-- 联系人操作交易 -->
+   <url-pattern>/workbench/contacts/transInfo</url-pattern>
+   <url-pattern>/workbench/contacts/delTrans</url-pattern>
+  </servlet-mapping>
+  <!-- 交易transaction -->
+  <servlet>
+    <servlet-name>transaction</servlet-name>
+    <servlet-class>com.test.crm.web.transaction.controller.TransactionController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+   <servlet-name>transaction</servlet-name>
+   <url-pattern>/workbench/transaction/create</url-pattern>
+   <url-pattern>/workbench/transaction/queryAct</url-pattern>
+   <url-pattern>/workbench/transaction/queryContact</url-pattern>
+   <url-pattern>/workbench/transaction/query</url-pattern>
+   <url-pattern>/workbench/transaction/detail</url-pattern>
+   <url-pattern>/workbench/transaction/edit</url-pattern>
+   <url-pattern>/workbench/transaction/save</url-pattern>
+   <url-pattern>/workbench/transaction/update</url-pattern>
+   <url-pattern>/workbench/transaction/del</url-pattern>
+    <url-pattern>/workbench/transaction/imports</url-pattern>
+    <url-pattern>/workbench/transaction/exportChk</url-pattern>
+    <url-pattern>/workbench/transaction/exportAll</url-pattern>
+    <url-pattern>/workbench/transaction/updateByStage</url-pattern>
+   <!-- 交易备注 -->
+    <url-pattern>/workbench/transaction/addRemark</url-pattern>
+    <url-pattern>/workbench/transaction/getRemarks</url-pattern>
+    <url-pattern>/workbench/transaction/updateRemark</url-pattern>
+    <url-pattern>/workbench/transaction/delRemark</url-pattern>
+    <!-- 交易历史 -->
+    <url-pattern>/workbench/transaction/history</url-pattern>
+  </servlet-mapping>
+  <!-- 图表 -->
+  <servlet>
+    <servlet-name>chart</servlet-name>
+    <servlet-class>com.test.crm.web.chart.controller.ChatController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>chart</servlet-name>
+   <url-pattern>/workbench/chart/trans</url-pattern>
+   <url-pattern>/workbench/chart/activity</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 组织机构 -->
+  <servlet>
+    <servlet-name>org</servlet-name>
+    <servlet-class>com.test.crm.web.settings.org.controller.OrgController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>org</servlet-name>
+   <url-pattern>/settings/org/save</url-pattern>
+   <url-pattern>/settings/org/detail</url-pattern>
+   <url-pattern>/settings/org/del</url-pattern>
+   <url-pattern>/settings/org/update</url-pattern>
+   <url-pattern>/settings/org/getOrgTree</url-pattern>
+  </servlet-mapping>
+
+</web-app>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.settings.org.dao.OrgDao">
+	<insert id="save" parameterType="Organization">
+		insert into 
+		tbl_org(id,code,name,orgType,description,manager,createBy,createTime,pId)
+		values(#{id},#{code},#{name},#{orgType},#{description},#{manager},#{createBy},#{createTime},#{pId})
+	</insert>
+	<update id="update" parameterType="Organization">
+		update tbl_org 
+		set code=#{code},name=#{name},orgType=#{orgType},description=#{description},manager=#{manager},editTime=#{editTime},editBy=#{editBy}
+		where id=#{id} 
+
+	</update>
+	<select id="getById" resultType="Organization">
+		select * from tbl_org where id = #{id}
+	</select>
+	<select id="getAll" resultType="Organization">
+		select * from tbl_org
+		order by createTime asc
+	</select>
+	<delete id="delById">
+		delete from tbl_org where id = #{id}
+	</delete>
+	<delete id="delByPId">
+		delete from tbl_org where pId = #{id}
+	</delete>
+</mapper>

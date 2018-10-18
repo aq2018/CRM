@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.UserManageDao">
+	<select id="login" resultType="User">
+		select 
+			id,account,username,deptno as deptno ,email,invalid_time,permit_ip,lockState,createBy as createBy,password,createTime as createTime,editBy as editBy,editTime as editTime
+		from
+			tbl_usermanage
+		where
+			account = #{arg0} and password = #{arg1}
+	</select>
+	
+	
+	<select id="getTotal" resultType="Long" parameterType="Map">
+		select 
+				count(*) 
+		from 
+			tbl_usermanage um
+		left JOIN tbl_dept dp
+		on (um.deptno = dp.deptno)
+		<where>
+			<if test="username != null and username != ''">
+				and um.username like '%' #{username} '%'
+			</if>
+			<if test="deptname != null and deptname != ''">
+				and dp.dname like '%' #{deptname} '%'
+			</if>
+			<if test="lockState != null and lockState != ''">
+				and um.lockState =#{lockState}
+			</if>
+			<if test="start_time != null and start_time != ''">
+				and um.invalid_time &lt;=#{start_time}
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and um.invalid_time &gt;=#{end_time}
+			</if>
+		</where>
+	</select>
+	<select id="getUMListByCondition" resultType="Map" parameterType="Map">
+		select 
+				um.id,account,username,dp.dname as deptname,email,invalid_time,permit_ip,lockState,createBy,createTime,editBy,editTime 
+		from 
+			tbl_usermanage um
+		left JOIN tbl_dept dp
+		on (um.deptno = dp.deptno)
+		<where>
+			<if test="username != null and username != ''">
+				and um.username like '%' #{username} '%'
+			</if>
+			<if test="deptname != null and deptname != ''">
+				and dp.dname like '%' #{deptname} '%'
+			</if>
+			<if test="lockState != null and lockState != ''">
+				and um.lockState =#{lockState}
+			</if>
+			<if test="start_time != null and start_time != ''">
+				and um.invalid_time &lt;=#{start_time}
+			</if>
+			<if test="end_time != null and end_time != ''">
+				and um.invalid_time &gt;=#{end_time}
+			</if>
+		</where>
+		order by createTime asc
+		limit #{pageNo} , #{pageSize}
+	</select>
+	
+	<select id="getDeptNoByName" resultType="String">
+		select deptno from tbl_dept where dname = #{deptname}
+	</select>
+	<insert id="addUser" parameterType="User">
+		insert into 
+		tbl_usermanage
+			(id,account,username,password,email,invalid_time,lockState,deptno,permit_ip,createBy,createTime) 
+		values
+			(#{id},#{account},#{username},#{password},#{email},#{invalid_time},#{lockState},#{deptno},#{permit_ip},#{createBy},#{createTime})
+	</insert>
+	<select id="getByAccount" resultType="Map">
+		select
+			um.id,account,username,password,email,invalid_time,lockState,deptno,permit_ip ,editBy
+		from
+			tbl_usermanage um
+		where account=#{account}
+	</select>
+	<select id="getById" resultType="Map">
+		select
+			id,account,username,password,email,invalid_time,lockState,dp.deptno as deptno,dp.dname as deptname,permit_ip ,editBy
+		from
+			tbl_usermanage um
+		inner join	
+			(select deptno,dname from tbl_dept) dp 
+		on um.deptno = dp.deptno and id=#{id}
+	</select>
+	<update id="updateUser" parameterType="User">
+		update
+			tbl_usermanage
+		set 
+			account=#{account},username=#{username},email=#{email},invalid_time=#{invalid_time},lockState=#{lockState},deptno=#{deptno},permit_ip=#{permit_ip},editBy=#{createBy},editTime=#{createTime}
+		where id =#{id}
+	</update>
+	<delete id="delUser">
+		delete from tbl_usermanage where id in(
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
+	<select id="getOwner" resultType="Map">
+		select id,username from tbl_usermanage
+	</select>
+	<select id="getIdByName" resultType="String">
+		select id from tbl_usermanage where username = #{username}
+	</select>
+	<select id="getOwnerById" resultType="Map">
+		select id,username from tbl_usermanage where id = #{id}
+	</select>
+	<update id="updateState" parameterType="User">
+		update tbl_usermanage set lockState = #{lockState},editBy = #{editBy},editTime = #{editTime} where id = #{id}
+	</update>
+	<select id="checkByAccount" resultType="int">
+		select count(*) from tbl_usermanage where account = #{account}
+	</select>
+	<update id="resetPwd" parameterType="User">
+		update tbl_usermanage set password = #{password} where account = #{account}
+	</update>
+	<select id="checkOldPwd" parameterType="User" resultType="int">
+		select count(*) from tbl_usermanage where account = #{account} and password =#{password}
+	</select>
+	<select id="getByAccountAndEmail" parameterType="User" resultType="int">
+		select count(*) from tbl_usermanage where account = #{account} and email = #{email}
+	</select>
+</mapper>

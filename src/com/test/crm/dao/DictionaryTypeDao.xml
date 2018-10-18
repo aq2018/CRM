@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.DictionaryTypeDao">
+	<select id="getDictionaryTypeList" resultType="DictionaryType">
+		select id,type,name,description from tbl_dictionarytype
+	</select>
+	
+	<insert id="addDictionaryType" parameterType="DictionaryType">
+		insert into tbl_dictionarytype(id,type,name,description) values(#{id},#{type},#{name},#{description});
+	</insert>
+	<select id="getDictionaryTypeById" resultType="DictionaryType">
+		select id,type,name,description from tbl_dictionarytype where id=#{id}
+	</select>
+	<delete id="delDictionaryType">
+		delete from tbl_dictionarytype where id in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+		#{id}
+		</foreach>
+	</delete>
+	<update id="updateDictionaryType">
+		update tbl_dictionarytype set type=#{type},name=#{name},description=#{description} where id=#{id};
+	</update>
+	<select id="checkDictTypeByCode" resultType="int">
+		select count(*) from tbl_dictionarytype where type=#{type}
+	</select>
+	<select id="getKeys" resultType="String">
+		select type from tbl_dictionarytype
+	</select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc_config.properties"/><!-- db配置文件 -->
+	<typeAliases>
+		<package name="com.test.crm.domain"/>
+		<package name="com.test.crm.web.settings.org.domain"/>
+		<package name="com.test.crm.web.settings.qx.permission.domain"/>
+		<package name="com.test.crm.web.settings.qx.role.domain"/>
+	</typeAliases>
+	<environments default="producement"><!-- 开发环境（会打印更多的日志）和生产环境producement -->
+		<environment id="producement">
+			<transactionManager type="JDBC" /><!-- 事务管理JDBC(mybatis默认的事务)|MANAGED（把事务交给其他框架或者容器） -->
+			<dataSource type="com.test.crm.util.DruidDataSourceFactory">
+				<property name="driverClassName" value="${jdbc.driverClassName}" /><!-- 使用druid驱动名:driverClassName -->
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- sqlmapper.xml映射文件的路径，package形式 -->
+		<package name="com.test.crm.dao"/>
+		<package name="com.test.crm.web.customer.dao"/>
+		<package name="com.test.crm.web.contact.dao"/>
+		<package name="com.test.crm.web.transaction.dao"/>
+		<package name="com.test.crm.web.chart.dao"/>
+		<package name="com.test.crm.web.settings.org.dao"/>
+		<package name="com.test.crm.web.settings.qx.permission.dao"/>
+		<package name="com.test.crm.web.settings.qx.role.dao"/>
+	</mappers>
+</configuration>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.contact.dao.ContactActRelationDao">
+	<select id="getActsByContactId" resultType="Map">
+		select r.id as relationId,m.name,m.start_date,m.end_date,u.username as owner 
+		from tbl_contacts_activity_relation r
+		join tbl_market m
+		join tbl_usermanage u
+		on m.owner=u.id
+		and r.activityId = m.id
+		where r.contactId = #{id}
+		order by m.start_date desc
+	</select>
+	<select id="getActByContactIdAndName" resultType="Map">
+		select m.id,m.name,m.start_date,m.end_date,u.username as owner 
+		from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id not in(select activityId from tbl_contacts_activity_relation where contactId = #{contactId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+		order by m.start_date desc
+		limit #{pageNo},#{pageSize}
+	</select>
+	<select id="getTotalByContactIdAndName" resultType="Long">
+		select count(*)
+		from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id not in(select activityId from tbl_contacts_activity_relation where contactId = #{contactId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+	</select>
+	<insert id="addAssociateAct">
+		insert into tbl_contacts_activity_relation(id,activityId,contactId) values
+		<foreach collection="list" item="a" separator=",">
+			(#{a.id},#{a.activityId},#{a.contactId})
+		</foreach>
+	</insert>
+	<delete id="delAssociateAct">
+		delete from tbl_contacts_activity_relation where id = #{id}
+	</delete>
+	<delete id="delByContactId">
+		delete from tbl_contacts_activity_relation where contactId = #{contactId}
+	</delete>
+	<delete id="delByContactIds">
+		delete from tbl_contacts_activity_relation where contactId in(
+		<foreach collection="array" item="contactId" separator=",">
+			#{contactId}
+		</foreach>
+		)
+	</delete>
+</mapper>

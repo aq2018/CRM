@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.MarketDao">
+	<select id="getMarketActiveCount" resultType="Long" parameterType="Map">
+		select
+			count(*) 
+		from 
+			tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like '%' #{name} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and m.start_date &gt; #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and m.end_date &lt; #{end_date}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getMarketActiveList" resultType="MarketActive" parameterType="Map">
+		select m.id,m.name,u.username as owner,m.start_date,m.end_date from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like '%' #{name} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="start_date != null and start_date != ''">
+				and m.start_date &gt; #{start_date}
+			</if>
+			<if test="end_date != null and end_date != ''">
+				and m.end_date &lt; #{end_date}
+			</if>
+		</where>
+		order by m.createTime desc
+		limit #{pageNo} , #{pageSize}
+	</select>
+	<select id="getAllActiveList" resultType="MarketActive" parameterType="Page">
+		select * from tbl_market
+		limit #{pageNo} , #{pageSize}
+	</select>
+	
+	<insert id="addMarketActive" parameterType="MarketActive">
+		insert into tbl_market(id,name,owner,start_date,end_date,cost,description,creater,createTime) 
+		values
+		<foreach collection="list" item="a" separator=",">
+			(#{a.id},#{a.name},#{a.owner},#{a.start_date},#{a.end_date},#{a.cost},#{a.description},#{a.creater},#{a.createTime})
+		</foreach>
+		
+	</insert>
+	
+	<delete id="delMarktActive">
+		delete from tbl_market where id in(
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
+	<select id="getById" resultType="MarketActive">
+		select m.name,m.id,u.username as owner,m.start_date,m.end_date,m.cost,m.description,m.creater,m.createTime,m.editer,m.editTime
+		from tbl_market m
+		join tbl_usermanage u
+		on u.id = m.owner
+		where m.id = #{id};
+	</select>
+	
+	<update id="updateMarktActive" parameterType="MarketActive">
+		update 
+			tbl_market 
+		set 
+			name=#{name},owner=#{owner},start_date=#{start_date},end_date=#{end_date},cost=#{cost},description=#{description},editer=#{editer},editTime=#{editTime} where id=#{id}
+	</update>
+	<select id="getOwnerById" resultType="String">
+		select owner from tbl_market where id=#{id}
+	</select>
+	<delete id="delete">
+		delete from tbl_market where id = #{id}
+	</delete>
+	<select id="getAll" resultType="MarketActive">
+		select * from tbl_market
+	</select>
+	<select id="exportById" resultType="MarketActive">
+		select * from tbl_market where id in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</select>
+	<select id="getByName" resultType="MarketActive" parameterType="Map">
+		select id,name,start_date,end_date,owner from  tbl_market where name like "%" #{name} "%"
+	</select>
+</mapper>

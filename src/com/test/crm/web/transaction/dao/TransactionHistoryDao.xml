@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.transaction.dao.TransactionHistoryDao">
+	<insert id="save" parameterType="TransactionHistory">
+		insert into tbl_trans_history(id,stage,money,expectedDate,createBy,createTime,transId)
+		values(#{id},#{stage},#{money},#{expectedDate},#{createBy},#{createTime},#{transId})
+	</insert>
+	<select id="listByTransId" resultType="TransactionHistory" parameterType="Map">
+		select *
+		from tbl_trans_history
+		where transId =#{transId}
+		order by createTime desc
+		limit #{pageNo},#{pageSize}
+	</select>
+	<select id="count" resultType="Long" parameterType="Map">
+		select count(*)
+		from tbl_trans_history
+		where transId =#{transId}
+	</select>
+	<select id="getPastStageByTransId" resultType="String">
+		select stage from (
+			select * 
+			from tbl_trans_history
+			where transId = #{transId}
+			order by createTime desc
+			limit 0,2
+			) a
+		order by a.createTime asc
+		limit 1
+	</select>
+	<delete id="delByTransIds">
+		delete from tbl_trans_history where transId in (
+		<foreach collection="array" item="transId" separator=",">
+			#{transId}
+		</foreach>
+		)
+	</delete>
+	<delete id="delByTransId">
+		delete from tbl_trans_history where transId = #{transId}
+	</delete>
+</mapper>

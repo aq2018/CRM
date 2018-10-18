@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.chart.dao.ChartDao">
+	<select id="getTransTotal" resultType="Long">
+		select count(*)
+		from tbl_trans
+	</select>
+	<select id="getTrans" resultType="Map">
+		select 
+		 stage as name,count(*) as value
+		from tbl_trans
+		GROUP BY
+		stage
+	</select>
+	<select id="getActivity" resultType="Map">
+		select 
+		 u.username as name,count(*) as value
+		from tbl_market m
+		join (select id,username from tbl_usermanage) u
+		on m.owner = u.id
+		GROUP BY
+		u.username
+	</select>
+</mapper>

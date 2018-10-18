@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.customer.dao.CustomerRemarkDao">
+	<insert id="add" parameterType="CustomerRemark" >
+		insert into 
+			tbl_customer_remark(id,noteContent,createBy,createTime,editFlag,customerId)
+		values
+			(#{id},#{noteContent},#{createBy},#{createTime},#{editFlag},#{customerId})
+	</insert>
+	<select id="getById" resultType="Map">
+		select r.id,r.noteContent,r.createBy,r.createTime,r.editBy,r.editTime,r.editFlag,r.customerId,c.fullname,c.appellation
+		from tbl_customer_remark  r
+		join tbl_contacts c
+		on r.customerId = c.customerId
+		where r.id= #{id}
+	</select>
+	<select id="getListByCustomerId" resultType="Map">
+		select r.id,r.noteContent,r.createBy,r.createTime,r.editBy,r.editTime,r.editFlag,r.customerId,IFNULL(c.fullname,"") as fullname,IFNULL(c.appellation,"") as appellation
+		from tbl_customer_remark  r
+		left join tbl_contacts c
+		on r.customerId = c.customerId
+		where r.customerId = #{customerId} 
+		order by r.createTime asc
+	</select>
+	<update id="update" parameterType="CustomerRemark">
+		update tbl_customer_remark 
+ 		set noteContent=#{noteContent},editBy=#{editBy},editTime=#{editTime},editFlag=#{editFlag}
+ 		where id=#{id}
+	</update>
+	<delete id="delById">
+		delete from tbl_customer_remark where id = #{id}
+	</delete>
+	<insert id="save" parameterType="Remark">
+		insert into tbl_customer_remark(id,noteContent,createBy,createTime,editBy,editTime,editFlag,customerId)
+		values
+		<foreach collection="list" item="r" separator=",">
+			(#{r.id},#{r.description},#{r.createBy},#{r.createTime},#{r.editBy},#{r.editTime},#{r.editFlag},#{r.customerId})
+		</foreach>
+	</insert>
+	<delete id="delByCustomerIds">
+		delete from tbl_customer_remark where customerId in (
+		<foreach collection="array" item="customerId" separator=",">
+			#{customerId}
+		</foreach>
+		)
+	</delete>
+</mapper>

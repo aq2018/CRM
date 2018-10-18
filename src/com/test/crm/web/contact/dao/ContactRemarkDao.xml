@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.contact.dao.ContactRemarkDao">
+	<insert id="add" parameterType="Remark">
+		insert into tbl_contacts_remark(id,description,createBy,createTime,editFlag,contactId)
+		values(#{id},#{description},#{createBy},#{createTime},#{editFlag},#{contactId})
+	</insert>
+	<select id="getRemark" resultType="Remark">
+		select * from tbl_contacts_remark where contactId = #{contactId} order by createTime asc
+	</select>
+	<update id="update" parameterType="Remark">
+		update tbl_contacts_remark set description=#{description},editFlag=#{editFlag},editBy=#{editBy},editTime=#{editTime} where id=#{id}
+	</update>
+	<delete id="delById">
+		delete from tbl_contacts_remark where id = #{id}
+	</delete>
+	<insert id="save" parameterType="Remark">
+		insert into tbl_contacts_remark(id,description,createBy,createTime,editBy,editTime,editFlag,contactId)
+		values
+		<foreach collection="list" item="r" separator=",">
+			(#{r.id},#{r.description},#{r.createBy},#{r.createTime},#{r.editBy},#{r.editTime},#{r.editFlag},#{r.contactId})
+		</foreach>
+	</insert>
+	<delete id="delByContactIds">
+		delete from tbl_contacts_remark where contactId in (
+			<foreach collection="array" item="contactId" separator=",">
+				#{contactId}
+			</foreach>
+		) 
+	</delete>
+	<delete id="delByContactId">
+		delete from tbl_contacts_remark where contactId = #{contactId}
+	</delete>
+</mapper>

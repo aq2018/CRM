@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.settings.qx.permission.dao.PermissionDao">
+	<insert id="save" parameterType="Permission">
+		insert into tbl_permission
+		values(#{id},#{name},#{modalURL},#{operateURL},#{sortNo},#{pid})
+	</insert>
+	<update id="update" parameterType="Permission">
+		update tbl_permission 
+		set name = #{name},modalURL = #{modalURL},operateURL = #{operateURL},sortNo = #{sortNo}
+		where id = #{id}
+	</update>
+	<delete id="del">
+		delete from tbl_permission where id = #{id}
+	</delete>
+	<select id="getById" resultType="Permission">
+		select * from tbl_permission where id = #{id}
+	</select>
+	<select id="listAll" resultType="Permission">
+		select * from tbl_permission
+		order by sortNo,pid asc
+	</select>
+	<select id="listByIds" resultType="Permission">
+		select * from tbl_permission where id in (
+		<foreach collection="list" item="rp" separator=",">
+			id = #{rp.permissionId}
+		</foreach>
+		)
+		order by sortNo asc
+	</select>
+</mapper>

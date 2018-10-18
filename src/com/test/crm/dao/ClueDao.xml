@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.ClueDao">
+	<select id="getTotal" resultType="Long" parameterType="Map">
+		select count(*)
+		from 
+			tbl_clue c
+		left join 
+			(select id,username from tbl_usermanage) u
+		on
+			c.pid_user = u.id
+		<where>
+			<if test="surname != null and surname != ''">
+				and surname like '%' #{surname} '%'
+			</if>
+			<if test="company != null and company != ''">
+				and company like '%' #{company} '%'
+			</if>
+			<if test="calls != null and calls != ''">
+				and calls like '%' #{calls} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="tel != null and tel != ''">
+				and tel like '%' #{tel} '%'
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone like '%' #{phone} '%'
+			</if>
+			<if test="state != null and state != ''">
+				and state like '%' #{state} '%'
+			</if>
+			<if test="source != null and source != ''">
+				and source like '%' #{source} '%'
+			</if>
+		</where>
+		
+	</select>
+	<select id="getList" resultType="Clue" parameterType="Map">
+		select 
+			c.id,u.username as owner,company,calls,surname,job,email,phone,tel,state,source,description,contactSummary,nextContactTime,address,website 
+		from 
+			tbl_clue c
+		left join 
+			(select id,username from tbl_usermanage) u
+		on
+			c.pid_user = u.id
+		<where>
+			<if test="surname != null and surname != ''">
+				and surname like '%' #{surname} '%'
+			</if>
+			<if test="company != null and company != ''">
+				and company like '%' #{company} '%'
+			</if>
+			<if test="calls != null and calls != ''">
+				and calls like '%' #{calls} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone like '%' #{phone} '%'
+			</if>
+			<if test="tel != null and tel != ''">
+				and tel like '%' #{tel} '%'
+			</if>
+			<if test="state != null and state != ''">
+				and state like '%' #{state} '%'
+			</if>
+			<if test="source != null and source != ''">
+				and source like '%' #{source} '%'
+			</if>
+		</where>
+		order by createTime desc
+		limit #{pageNo},#{pageSize}
+	</select>
+	
+	<insert id="add" parameterType="Clue">
+		insert into tbl_clue(id,pid_user,company,calls,surname,job,email,phone,state,source,description,contactSummary,nextContactTime,address,website,tel,creater,createTime,editer,EditTime)
+		values
+		<foreach collection="list" item="c" separator=",">
+			(#{c.id},#{c.pid_user},#{c.company},#{c.calls},#{c.surname},#{c.job},#{c.email},#{c.phone},#{c.state},#{c.source},#{c.description},#{c.contactSummary},#{c.nextContactTime},#{c.address},#{c.website},#{c.tel},#{c.creater},#{c.createTime},#{c.editer},#{c.editTime})
+		</foreach>
+	</insert>
+	<select id="getById" resultType="Clue" parameterType="String">
+		select 
+			c.id,pid_user,u.username as owner,company,calls,surname,job,email,phone,state,source,description,contactSummary,nextContactTime,address,website,tel,creater,createTime,editer,editTime
+		from
+			tbl_clue c
+		join (select id,username from tbl_usermanage) u
+		on c.pid_user = u.id		
+		where c.id in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</select>
+	<update id="update" parameterType="Clue">
+		update 
+			tbl_clue 
+		set 
+			pid_user=#{pid_user},company=#{company},calls=#{calls},surname=#{surname},job=#{job},email=#{email},phone=#{phone},state=#{state},source=#{source},description=#{description},contactSummary=#{contactSummary},nextContactTime=#{nextContactTime},address=#{address},website=#{website},tel=#{tel},editTime=#{editTime}
+		where id = #{id} 
+	</update>
+	<delete id="del">
+		delete from tbl_clue where id in
+		<foreach collection="array" item="id" separator="," open="(" close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<delete id="delById">
+		delete from tbl_clue where id =#{id}
+	</delete>
+	<select id="getAll" resultType="Clue">
+		select * from tbl_clue
+	</select>
+	<select id="getByid2" resultType="Clue">
+		select * from tbl_clue where id = #{id}
+	</select>
+</mapper>

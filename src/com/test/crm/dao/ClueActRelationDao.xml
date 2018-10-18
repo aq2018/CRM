@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.ClueActRelationDao">
+	<select id="getActsByClueId" resultType="hashMap">
+		select r.id as relationId,m.name,m.start_date,m.end_date,u.username as owner from tbl_clue_market_relation r
+		join tbl_market m
+		join tbl_usermanage u
+		on m.owner=u.id
+		and r.p_marketId = m.id
+		where r.p_clueId = #{id}
+		order by m.start_date desc
+	</select>
+	<select id="getActByClueIdAndName" resultType="Map" parameterType="Map">
+		select m.id,m.name,m.start_date,m.end_date,u.username as owner from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id not in(select p_marketId from tbl_clue_market_relation where p_clueId = #{clueId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+		order by m.start_date desc
+		limit #{pageNo},#{pageSize}
+	</select>
+	<select id="getTotal" resultType="Long" parameterType="Map">
+		select count(*) from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id not in(select p_marketId from tbl_clue_market_relation where p_clueId = #{clueId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+	</select>
+	<select id="getActsOriginByClueIdAndName" resultType="Map" parameterType="Map">
+		select m.id,m.name,m.start_date,m.end_date,u.username as owner from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id in(select p_marketId from tbl_clue_market_relation where p_clueId = #{clueId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+		limit #{pageNo},#{pageSize}
+	</select>
+	<select id="getTotal2" resultType="Long" parameterType="Map">
+		select count(*) from tbl_market m
+		join tbl_usermanage u
+		on m.owner = u.id
+		and m.id in(select p_marketId from tbl_clue_market_relation where p_clueId = #{clueId})
+		<where>
+			<if test="name != null and name != ''">
+				and m.name like "%" #{name} "%"
+			</if>
+		</where>
+	</select>
+	<insert id="addAssociateAct">
+		insert into tbl_clue_market_relation(id,p_marketId,p_clueId) values
+		<foreach collection="list" item="a" separator=",">
+			(#{a.id},#{a.p_marketId},#{a.p_clueId})
+		</foreach>
+	</insert>
+	<delete id="delAssociateAct">
+		delete from tbl_clue_market_relation where id = #{id}
+	</delete>
+	<select id="listByClueId" resultType="ClueActRelation">
+		select * from tbl_clue_market_relation where p_clueId = #{id}
+	</select>
+	<delete id="delByClueId">
+		delete from tbl_clue_market_relation where p_clueId = #{clueId}
+	</delete>
+	<delete id="delByClueIds">
+		delete from tbl_clue_market_relation where p_clueId in (
+		<foreach collection="array" item="p_clueId" separator=",">
+			#{p_clueId}
+		</foreach>
+		)
+	</delete>
+</mapper>

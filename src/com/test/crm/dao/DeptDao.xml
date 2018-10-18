@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.DeptDao">
+	
+	<!-- userDQL -->
+	<select id="getTotalCount" resultType="Long">
+		select count(*) from tbl_dept
+	</select>
+	<select id="getPageList" resultType="Dept">
+		select * from tbl_dept
+		order by deptno
+		limit #{arg0},#{arg1}
+	</select>
+	<select id="getDeptList" resultType="Dept">
+		select id,deptno,dname,master,tel,descript from tbl_dept
+	</select>
+	<insert id="addDept" parameterType="Dept">
+		insert into tbl_dept(id,deptno,dname,master,tel,descript) values(#{id},#{deptno},#{dname},#{master},#{tel},#{descript})
+	</insert>
+	
+	<select id="getDeptById" resultType="Dept">
+		select * from tbl_dept where id = #{id};	
+	</select>
+	
+	<select id="getDeptIdByDno" resultType="int">
+		select id from tbl_dept where deptno = #{deptno};
+	</select>
+	<select id="getNoByName" resultType="Map">
+		select deptno,dname from tbl_dept where dname = #{dname};
+	</select>
+	<select id="mapNoAndNameByName" resultType="Map">
+		select deptno,dname from tbl_dept where dname like #{dname} '%';
+	</select>
+	
+	<select id="checkDeptByNo" resultType="int">
+		select count(*) from tbl_dept where deptno = #{deptno};
+	</select>
+	
+	<update id="updateDeptByNo" parameterType="Dept">
+		update tbl_dept set dname = #{dname},master = #{master},tel = #{tel},descript = #{descript} where deptno = #{deptno} 
+	</update>
+	<update id="updateDeptById" parameterType="Map"><!-- mmp忘记写set deptno = #{deptno}，是说老是改不了-->
+		update tbl_dept set deptno = #{deptno},dname = #{dname},master = #{master},tel = #{tel},descript = #{descript} where id = #{id}
+	</update>
+	<update id="update" parameterType="Dept">
+		update tbl_dept set deptno = #{deptno},dname = #{dname},master = #{master},tel = #{tel},descript = #{descript} where id = #{id}
+	</update>
+	
+	<delete id="delDept" parameterType="String">
+		delete from tbl_dept where id in(
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		) 
+	</delete>
+	<select id="getdeptNameList" resultType="Dept">
+		select deptno,dname from tbl_dept
+	</select>
+</mapper>

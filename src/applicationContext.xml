@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+	<bean id="MarketService" class="com.test.crm.service.impl.MarketServiceImpl" />
+	<bean id="NoteActService" class="com.test.crm.service.impl.NoteActServiceImpl" />
+	<bean id="DeptService" class="com.test.crm.service.impl.DeptServiceImpl" />
+	<bean id="RoleService" class="com.test.crm.service.impl.RoleServiceImpl" />
+	<bean id="ClueService" class="com.test.crm.service.impl.ClueServiceImpl" />
+	<bean id="ClueRemarkService" class="com.test.crm.service.impl.ClueRemarkServiceImpl" />
+	<bean id="DictionaryTypeService" class="com.test.crm.service.impl.DictionaryTypeServiceImpl" />
+	<bean id="DictionaryValueService" class="com.test.crm.service.impl.DictionaryValueServiceImpl" />
+	<bean id="UserManageService" class="com.test.crm.service.impl.UserManageServiceImpl" />
+	<bean id="ClueActRelationService" class="com.test.crm.controller.ClueActRelationServiceImpl" />
+	<bean id="CustomerService" class="com.test.crm.web.customer.service.impl.CustomerServiceImpl" />
+	<bean id="CustomerRemarkService" class="com.test.crm.web.customer.service.impl.CustomerRemarkServiceImpl" />
+	<bean id="ContactService" class="com.test.crm.web.contact.service.impl.ContactServiceImpl" />
+	<bean id="ContactRemarkService" class="com.test.crm.web.contact.service.impl.ContactRemarkServiceImpl" />
+	<bean id="ContactActRelationService" class="com.test.crm.web.contact.service.impl.ContactActRelationServiceImpl" />
+	<bean id="TransactionService" class="com.test.crm.web.transaction.service.impl.TransactionServiceImpl" />
+	<bean id="TransRemarkService" class="com.test.crm.web.transaction.service.impl.TransRemarkServiceImpl" />
+	<bean id="TransactionHistoryService" class="com.test.crm.web.transaction.service.impl.TransactionHistoryServiceImpl" />
+	<bean id="ChartService" class="com.test.crm.web.chart.service.ChartServiceImpl" />
+	<bean id="OrgService" class="com.test.crm.web.settings.org.service.impl.OrgServiceImpl" />
+	<bean id="PermissionService" class="com.test.crm.web.settings.qx.permission.service.impl.PermissionServiceImpl" />
+	<bean id="RolePermissionRelationService" class="com.test.crm.web.settings.qx.role.service.RolePermissionRelationServiceImpl" />
+</beans>
+

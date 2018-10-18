@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.contact.dao.ContactDao">
+	<insert id="add" parameterType="Contact">
+		insert into 
+			tbl_contacts(id,owner,source,customerId,fullname,appellation,email,mphone,job,birth,createBy,createTime,description,contactSummary,nextContactTime,address)
+		values
+			(#{id},#{owner},#{source},#{customerId},#{fullname},#{appellation},#{email},#{mphone},#{job},#{birth},#{createBy},#{createTime},#{description},#{contactSummary},#{nextContactTime},#{address})
+	</insert>
+	<select id="getById" resultType="Map">
+		select 
+			ct.id,ct.owner,source,customerId,cs.name as customerName,fullname,appellation,email,mphone,job,birth,ct.description,ct.contactSummary,ct.nextContactTime,ct.address
+		from tbl_contacts ct
+		join tbl_customer cs
+		on ct.customerId = cs.id
+		where ct.id = #{id}
+	</select>
+	<select id="getById2" resultType="Map">
+		select 
+			ct.id,ct.owner as ownerId,u.username as owner,source,customerId,cs.name as customerName,fullname,appellation,ct.email,mphone,job,birth,ct.description,ct.contactSummary,ct.nextContactTime,ct.address,ct.createBy,ct.createTime,ct.editBy,ct.editTime
+		from tbl_contacts ct
+		join tbl_customer cs
+		join tbl_usermanage u
+		on ct.customerId = cs.id and u.id = ct.owner
+		where ct.id = #{id}
+	</select>
+	<update id="update" parameterType="Contact">
+		update tbl_contacts 
+		set owner=#{owner},source=#{source},fullname=#{fullname},appellation=#{appellation},email=#{email},mphone=#{mphone},job=#{job},birth=#{birth},description=#{description},contactSummary=#{contactSummary},nextContactTime=#{nextContactTime},address=#{address},editBy=#{editBy},editTime=#{editTime}
+		where id=#{id}
+	</update>
+	<select id="getContacts" resultType="Map">
+		select  ct.id,u.username as owner,cu.name as customerName,ct.source,ct.fullname,ct.birth
+		from tbl_contacts ct
+		left join tbl_usermanage u
+		on ct.owner = u.id
+		left join tbl_customer cu
+		on ct.customerId = cu.id
+		<where>
+			<if test="fullname != null and fullname != ''">
+				and ct.fullname like '%' #{fullname} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="source != null and source != ''">
+				and ct.source like '%' #{source} '%'
+			</if>
+			<if test="customerName != null and customerName != ''">
+				and cu.name like '%' #{customerName} '%'
+			</if>
+			<if test="birth != null and birth != ''">
+				and ct.birth like '%' #{birth} '%'
+			</if>
+		</where>
+		order by ct.createTime asc
+		limit #{pageNo} , #{pageSize}
+	</select>
+	<select id="getTotal" resultType="Long">
+		select  count(*)
+		from tbl_contacts ct
+		left join tbl_usermanage u
+		on ct.owner = u.id
+		left join tbl_customer cu
+		on ct.customerId = cu.id
+		<where>
+			<if test="fullname != null and fullname != ''">
+				and ct.fullname like '%' #{fullname} '%'
+			</if>
+			<if test="owner != null and owner != ''">
+				and u.username like '%' #{owner} '%'
+			</if>
+			<if test="source != null and source != ''">
+				and ct.source like '%' #{source} '%'
+			</if>
+			<if test="customerName != null and customerName != ''">
+				and cu.name like '%' #{customerName} '%'
+			</if>
+			<if test="birth != null and birth != ''">
+				and ct.birth like '%' #{birth} '%'
+			</if>
+		</where>
+	</select>
+	<insert id="add2" parameterType="Contact">
+		insert into 
+		tbl_contacts() 
+		values
+		<foreach collection="list" item="c" separator=",">
+			(#{id},#{owner},#{source},#{customerId},#{fullname},#{appellation},#{email},#{mphone},#{job},#{birth},#{createBy},#{createTime},#{editBy},#{editTime},#{description},#{contactSummary},#{nextContactTime},#{address})
+		</foreach>
+	</insert>
+	<select id="getAll" resultType="Contact">
+		select * from tbl_contacts
+	</select>
+	<select id="getById3" resultType="Contact">
+		select * from tbl_contacts where id in(
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</select>
+	<select id="listByCustomerId" resultType="Contact">
+		select a.id,b.id,fullname,email,mphone
+		from tbl_contacts a
+		join tbl_customer b
+		on a.customerId = b.id
+		where a.customerId = #{id}
+	</select>
+	<delete id="delById">
+		delete from tbl_contacts where id=#{id}
+	</delete>
+	<select id="queryByName" resultType="Contact" parameterType="Map">
+		select  id,fullname,email,mphone
+		from tbl_contacts 
+		<where>
+			<if test="fullname != null and fullname != ''">
+				and fullname like "%" #{fullname} "%"
+			</if>
+		</where>
+		order by createTime asc
+		limit #{pageNo} , #{pageSize}
+	</select>
+	<select id="getTotal2" resultType="Long" parameterType="Map">
+		select  count(*)
+		from tbl_contacts 
+		<where>
+			<if test="fullname != null and fullname != ''">
+				and fullname like "%" #{fullname} "%"
+			</if>
+		</where>
+	</select>
+	<delete id="delByCustomerId">
+		delete from tbl_contacts where customerId in (
+		<foreach collection="array" item="customerId" separator=",">
+			#{customerId}
+		</foreach>
+		)
+	</delete>
+	<delete id="delByIds">
+		delete from tbl_contacts where id in (
+		<foreach collection="array" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>	
+</mapper>

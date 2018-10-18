@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.web.transaction.dao.TransRemarkDao">
+	<select id="listByCustomerId" resultType="Remark">
+		select r.id,r.description,r.createBy,r.createTime,r.editBy,r.editTime,r.editFlag,c.name as customerId
+		from tbl_trans_remark  r
+		join tbl_trans t
+		join tbl_customer c
+		on r.transId = t.id
+		and c.id = t.customerId
+		where r.transId=#{transId}
+		order by r.createTime asc
+	</select>
+	<insert id="save" parameterType="Remark">
+		insert into tbl_trans_remark(id,description,createBy,createTime,editFlag,transId)
+		values(#{id},#{description},#{createBy},#{createTime},#{editFlag},#{transId})
+	</insert>
+	<delete id="delById">
+		delete from tbl_trans_remark where id = #{id}
+	</delete>
+	<update id="update" parameterType="Remark">
+		update tbl_trans_remark set description=#{description},editFlag=#{editFlag},editBy=#{editBy},editTime=#{editTime} where id=#{id}
+	</update>
+	<delete id="delByTransIds">
+		delete from tbl_trans_remark where transId in (
+		<foreach collection="array" item="transId" separator=",">
+			#{transId}
+		</foreach>
+		)
+	</delete>
+	<delete id="delByTransId">
+		delete from tbl_trans_remark where transId = #{transId}
+	</delete>
+</mapper>

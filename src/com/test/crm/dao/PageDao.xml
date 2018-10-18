@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.crm.dao.PageDao">
+	<select id="getTotalCount" resultType="Long">
+		select count(*) from tbl_dept
+	</select>
+	<select id="getTotalCount2" resultType="Long">
+		select count(*) from tbl_dept
+	</select>
+	
+	<select id="getCurrentPageList" resultType="Dept" parameterType="Map">
+		select deptno,dname,master,tel,descript from tbl_dept limit #{pageNo} , #{pageSize}
+	</select>
+	<select id="getPageList" parameterType="Map" resultType="Map">
+		select 
+			deptno,dname,master,tel,descript 
+		from 
+			tbl_dept
+		<where>
+			<if test="dname != null and dname != ''">
+				and dname like '%' #{dname} '%'
+			</if>
+			<if test="master != null and master != ''">
+				and master like '%' #{master} '%'
+			</if>
+		</where>
+		limit 
+			#{pageNo},#{pageSize} 
+	</select>
+	<select id="getList" resultType="Dept">
+		select deptno,dname,master,tel,descript from tbl_dept limit #{arg0},#{arg1}
+	</select>
+</mapper>
